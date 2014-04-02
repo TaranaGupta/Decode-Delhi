@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DecodeDelhi</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+    <meta name="format-detection" content="telephone=no" />
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+
+      #map-canvas{
+        z-index: 1;
+        
+      }
+    </style>
+
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!--
+    Include the maps javascript with sensor=true because this code is using a
+    sensor (a GPS locator) to determine the user's location.
+    See: https://developers.google.com/maps/documentation/javascript/tutorial#Loading_the_Maps_API
+    -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCj64SLgM6xw5SvmXq25OH_-Md-kwyeNeQ&sensor=true"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+
+    <script src="/public/js/handlebars-v1.3.0.js"></script>
+    <script src="/public/js/socket.io.min.js"></script>
+
+    <script>
+
+
+     //var socket = socket = io.connect('/'); // 'http://localhost:8080' //'{{ socketIOHost }}'
+
+
+        //Accordion Menu 
+        $(document).ready(function(){
+      
+        $('#cssmenu ul ul li:odd').addClass('odd');
+        $('#cssmenu ul ul li:even').addClass('even');
+        $('#cssmenu > ul > li > a').click(function() {
+          $('#cssmenu li').removeClass('active');
+          $(this).closest('li').addClass('active'); 
+          var checkElement = $(this).next();
+          if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+            $(this).closest('li').removeClass('active');
+            checkElement.slideUp('normal');
+          }
+          if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+            $('#cssmenu ul ul:visible').slideUp('normal');
+            checkElement.slideDown('normal');
+          }
+          if($(this).closest('li').find('ul').children().length == 0) {
+            return true;
+          } else {
+            return false; 
+          }   
+        });
+
+        });
+//Accordion Menu finish
+
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see a blank space instead of the map, this
+// is probably because you have denied permission for location sharing.
+
+
+var map;
+
+function initialize() {
+  var mapOptions = {
+    zoom: 14,
+    center: new google.maps.LatLng(28.628052, 77.218454),
+    mapTypeControl: false,
+    panControl: false,
+    scaleControl: true,
+    streetViewControl: false,
+    zoomControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL,
+      position: google.maps.ControlPosition.LEFT_BOTTOM
+    }
+  }
+  
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'Location found using HTML5.'
+      });
+
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+}
+
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Error: The Geolocation service failed.';
+  } else {
+    var content = 'Error: Your browser doesn\'t support geolocation.';
+  }
+
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(28.628052, 77.218454),
+    content: content
+  };
+
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    
+    <header id="header">
+                                      <div id="sticky">
+                                          <div id="nav-bar">
+                                            <div id="headerBar"></div>
+                                            <div id="nav-bar1"><a href="homepage"  id="homelink"><img width="200px" src="image/logo.png" alt="logo"/></a></div>
+
+                                            <div id="nav-bar2"></div>
+                                            <div id="nav-bar3">
+                                                 <div id="internal-links">
+                                                   <!--   <h3 style="position: absolute; left:40%; display:inline;"><snap style="color:#191547;">#</snap>BeSafe <snap style="color:#F68E47;">#</snap>BeSmart  <snap style="color:#E8238E;">#</snap>KnowMore</h3>-->
+                                                    <!-- <ul class="nav">
+                                                      <li><a href="#">About</a></li>
+                                                      <li><a href="#">How To Participate</a></li>
+                                                      <li><a href="#">Privacy Policy</a></li>
+                                                  </ul>-->
+
+                                                  <span class="nav"><a href="#">About</a> <strong>.</strong> <a href="#">How To Participate</a> <strong>.</strong> <a href="#">Privacy Policy</a></span>
+                                                 </div>
+                                                 </div>
+                                            </div>
+
+                                            <div id="nav-bar4"></div>
+                                      </div>
+                                    </div>
+    </header>
+
+    <div id="wrap"  > 
+                    
+                    <div class="column_grid">
+                              <div class="column_grid1 ">
+                                <div id='cssmenu'>
+                                        <ul>
+                                             <li><a href='#'><img width="30px" src="image/besafe 30x30.png" alt="symbol"/><span>Report A Harassment</span></a>
+                                              <ul>
+                                                   <li>
+                                                    <img width="20px" src="image/instagram icon 24x24.png" alt="symbol"/>
+                                                    <span><b>Instagram</b>, Your Story With The Location Tag, #area name <snap style="text-transform: none; font-weight: bold">(eg.#Janpath)</snap> #BeSafe #DeCodeDelhi</span></li>
+                                                   <li><a href='#'><img width="20px" src="image/besafe 30x30.png" alt="symbol"/><span>Drop Anonymously</span></a></li>
+                                                </ul>
+                                             </li>
+                                             <li><a href='#'><img width="30px" src="image/besmart 30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
+                                                <ul>
+                                                   <li><a href='#'><span>Widgets</span></a></li>
+                                                   <li><a href='#'><span>Menus</span></a></li>
+                                                </ul>
+                                             </li>
+                                             <li><a href='#'><img width="30px" src="image/knowmore 30x30.png" alt="symbol"/><span>What’s up Delhi?</span></a>
+                                                <ul>
+                                                   <li><a href='#'><span>About</span></a></li>
+                                                </ul>
+                                             </li>
+                                        </ul>
+                                </div>
+                              </div>
+
+
+                             <!--********************************
+                              IMAGE instagram
+                              *********************************-->
+
+                              <div class="column_grid2">
+                              <!--********************************
+                              search bar
+                              *********************************-->
+                                                       <div id="searchboxwrapper">
+                                                          <div class="searchbox">
+                                                             
+                                                                   <form class="initial-searchbox-wrapper" role="search" method="post" action="">
+                                                                    <input type="text" value="search(ex. address, key words, etc.)" name="" class="searchboxinput">
+                                                                     <input type="image" width="20px" src="image/search.png" value="" id="search_button">
+                                                                   </form>
+                                                                  <br/>
+                                                              </form>
+                                                          </div>
+                                                        </div>
+                              <!--********************************
+                              IMAGE WRAPPER - content
+                              *********************************-->
+                                                       <div id="imgContent" ></div>
+                            </div>
+                    </div>
+
+                    <div id="map-canvas"></div>
+     </div>
+
+     
+              
+  </body>
+</html>
