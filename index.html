@@ -95,7 +95,15 @@
           }   
         });
 
-        });
+        $("span #mpcClients").click(function() {
+        $("#hidden0").slideToggle(500);
+
+        // This adds a class if the element doesn't already have it
+        // if the element already has the class it will remove it.
+        $("td h3").toggleClass("right down"); 
+       });
+
+  });
 
 
 
@@ -212,27 +220,84 @@ google.maps.event.addDomListener(window, 'load', initialize);
                     <div class="column_grid">
                               <div class="column_grid1 ">
                                 <div id='cssmenu'>
-                                        <ul>
-                                             <li><a href='#'><img width="30px" src="image/besafe30x30.png" alt="symbol"/><span>Report A Harassment</span></a>
-                                              <ul>
-                                                   <li>
-                                                    <img width="20px" src="image/instagramicon24x24.png" alt="symbol"/>
-                                                    <span><b>Instagram</b>, Your Story With The Location Tag, #area name <snap style="text-transform: none; font-weight: bold">(eg.#Janpath)</snap> #BeSafe #DeCodeDelhi</span></li>
-                                                   <li><a href='#'><img width="20px" src="image/besafe 30x30.png" alt="symbol"/><span>Drop Anonymously</span></a></li>
-                                                </ul>
-                                             </li>
-                                             <li><a href='#'><img width="30px" src="image/besmart30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
-                                                <ul>
-                                                   <li><a href='#'><span>Widgets</span></a></li>
-                                                   <li><a href='#'><span>Menus</span></a></li>
-                                                </ul>
-                                             </li>
-                                             <li><a href='#'><img width="30px" src="image/knowmore30x30.png" alt="symbol"/><span>What’s up Delhi?</span></a>
-                                                <ul>
-                                                   <li><a href='#'><span>About</span></a></li>
-                                                </ul>
-                                             </li>
-                                        </ul>
+                                  <ul>
+                                             <li><a href='#'><img class="a" width="30px" src="image/besafe30x30.png" alt="symbol"/><span>Report Harassment</span></a>
+                                                 <table style="width:100%">
+                                                        <tr>
+                                                          <td><img class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
+                                                          <td><snap>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></snap></td>
+                                                          <td></td>
+                                                        </tr>
+                                                        <tr >
+                                                          <td><img class="iconimg" src="image/besafe30x30.png" alt="symbol"/></td>
+                                                          <td><snap>Drop Anonymously</snap></td>
+                                                          <td><snap class="right"></snap></td>
+                                                        </tr>
+                                                    <!--**********************Report Harassment end ***********-->
+                                                  </table>
+                                               </li>
+
+                                                <li><a href='#'><img class="a" width="30px" src="image/besmart30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
+                                                 <table style="width:100%">
+                                                  <tr>
+                                                          <td><img class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
+                                                          <td><snap>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSmart #DeCodeDelhi</snap></snap></td>
+                                                        </tr>
+                                                        <tr >
+                                                          <td><img class="iconimg" src="image/besafe30x30.png" alt="symbol"/></td>
+                                                          <td><snap>Drop Anonymously</snap></td>
+                                                          <td><snap class="right"></snap></td>
+                                                        </tr>
+                                                    <!--**********************Drop A Smart Tip***********-->
+                                                  </table>
+                                                </li>
+
+                                                <li><a href='#'><img class="a" width="30px" src="image/knowmore30x30.png" alt="symbol"/><span>What’s up Delhi?</span></a>
+                                                 <table style="width:100%">
+                                                  <tr>
+                                                          <td><img class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
+                                                          <td><snap>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #KnowMore #DeCodeDelhi</snap></snap></td>
+                                                        </tr>
+                                                        <tr>
+                                                          <td><img class="iconimg" src="image/besafe30x30.png" alt="symbol"/></td>
+                                                          <td><a href='#'><snap>Drop Anonymously</snap></a></td>
+                                                          <td><snap class="right"></snap></td>
+                                                        </tr>
+                                                    <!--**********************What’s up Delhi?***********-->
+                                                  </table>
+                                                </li>
+                                  </ul>
+
+
+
+
+
+
+
+
+
+          <ul>
+               <li><a href='#'><img width="30px" src="image/besafe30x30.png" alt="symbol"/><span>Report Harassment</span></a>
+                <ul><li style="vertical-align: middle;">
+                        <img style="padding-top: 5px;" width="10%" src="image/instagramicon22x22.png" alt="symbol"/>
+                        <span  style="float:right; width:80%">Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></span></li>
+                     <li><a href='#'><img width="20px" src="image/besafe30x30.png" alt="symbol"/><span>Drop Anonymously</span></a></li>
+                </ul>
+               </li>
+
+               <li><a href='#'><img width="30px" src="image/besmart30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
+                  <ul>
+                     <li><a href='#'><span>Widgets</span></a></li>
+                     <li><a href='#'><span>Menus</span></a></li>
+                  </ul>
+               </li>
+               <li><a href='#'><img width="30px" src="image/knowmore30x30.png" alt="symbol"/><span>What’s up Delhi?</span><p class="right"></p></a>
+
+                  <ul>
+                     <li><a href='#'><span>About</span></a></li>
+                  </ul>
+               </li>
+          </ul>
                                 </div>
                               </div>
 
@@ -242,14 +307,16 @@ google.maps.event.addDomListener(window, 'load', initialize);
                               *********************************-->
 
                               <div class="column_grid2">
+                                                  <div id="searchplaceboxwrapper">
                               <!--********************************
                               search bar
                               *********************************-->
                                                        <div id="searchboxwrapper">
                                                           <div class="searchbox">
-                                                             
                                                                    <form class="initial-searchbox-wrapper" name="input" role="search" method="get" action="">
-                                                                    <input type="text" value="search(ex. address, key words, etc.)" name="place" class="searchboxinput">
+                                                                    <input type="text" value="search" onfocus="if(this.value == 'value') { this.value = ''; }" onblur=”if(this.value == ”) { this.value = ”; }” name="place" class="searchboxinput">
+
+                                                                    
                                                                     <!-- <input type="image" width="20px" src="image/search.png" value="" id="search_button" onClick="sendInstagramSearchRequest()">-->
 
 
@@ -259,15 +326,28 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                                               </form>
                                                           </div>
                                                         </div>
+
+                             <!--********************************
+                              Place will come from JS
+                              *********************************-->
+
+                                                        <div id="placenamewrapper">
+                                                          <div id="placename"></div>
+                                                        </div>
+                                                </div>   <!--searchplaceboxwrapper end-->   
+
                               <!--********************************
                               IMAGE WRAPPER - content
                               *********************************-->
-                                                       <div id="imgContent"></div>
-                            </div>
-                    </div>
+                                                       <div id="instaimage">
+                                                        <div id="imgContent"></div>
+                                                       </div>
 
-                    <div id="map-canvas"></div>
-     </div>
+                           </div><!--column_grid2 end-->
+                  </div> <!--column_grid end-->
+
+                 <div id="map-canvas"></div>
+     </div><!--wrap end-->
 
      
               
