@@ -251,12 +251,16 @@ a:hover {
   text-decoration: none;
   vertical-align: middle;
 }
+
 /*table*/
 #cssmenu {
   width: 100%;
   font-size: 13px;
   color: #939597;
   font-weight: 300;
+}
+#cssmenu ul li ul {
+  display: none;
 }
 
 #cssmenu > ul > li{
@@ -265,9 +269,13 @@ a:hover {
   padding-bottom: 10px;
 }
 
-#cssmenu > ul > li > a {
+#cssmenu > ul > li > a{
   color: #939597;
 }
+#cssmenu ul li a:hover {
+  color: #5D2C84;
+}
+
 
 #cssmenu > ul > li > a > span {
   background: #FEF0B6;
@@ -282,63 +290,35 @@ a:hover {
 
 .iconimg{
   padding-left: 10px;
-  padding-right: 5px;
+  padding-right: 10px;
+  width: 20px;
 
 }
+
+.iconimg2{
+  padding-left: 70px;
+  padding-right: 10px;
+
+}
+
+
+#cssmenu ul li li:last-child {
+  border-bottom: none;
+}
+
 
 
 /* Sub menu */
-#cssmenu ul li table {
-  /*display: none;*/
-}
-#cssmenu ul li table tr {
+
+
+#cssmenu ul ul li {
+  /*vertical-align: middle;*/
   color:#939597;
   border-bottom: 1px solid #e0e0e0;
   border-top: 0;
   font-size:12px;
   padding-top:15px;
   padding-bottom: 15px;
-  padding-left: 5px;
-  padding-right: 5px;
-  display: block;
-}
-
-#cssmenu tr:last-child {
-  border-bottom: none;
-}
-#cssmenu ul li table tr a{
-  display: block;
-  color: #939597;
-  font-size: 14px;
-  font-weight:300;
-}
-#cssmenu ul li table tr a:hover {
-  color: #bd0e36;
-}
-
-}
-#cssmenu td.odd {
-  margin-top:1px;
-  background: #fff;
-  vertical-align: middle;
-}
-
-#cssmenu td.even {
-  display: block;
-  background: #fff;
-  margin-top:5px;
-}
-
-/*
-
-#cssmenu ul ul li {
-  vertical-align: middle;
-  color:#939597;
-  border-bottom: 1px solid #e0e0e0;
-  border-top: 0;
-  font-size:12px;
-  padding-top:10px;
-  padding-bottom: 10px;
   padding-left: 5px;
   padding-right: 5px;
   display: block;
@@ -357,8 +337,7 @@ a:hover {
 
 #cssmenu ul ul li.odd {
   margin-top:1px;
-  background: #fff;
-  height: 60px;
+  background: #edeceb;
   vertical-align: middle;
 }
 
@@ -366,22 +345,134 @@ a:hover {
   display: block;
   background: #fff;
   margin-top:5px;
-  height: 60px;
   vertical-align: middle;
+}
+
+/***********
+* form
+************/
+form {
+  margin: 0;
+  display: block;
+  margin-top: 0em;
+  font-size: 13px;
+  font-weight:300;
+  color: #888;
+  overflow: scroll;
+  max-height: 200px;
+}
+
+label {
+  display: block;
+  color: #404853;
+  padding-right:5px
+}
+
+input {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px 0 #fff;
+ 
+}
+.required_notification{
+  padding: 0px 5px;
+}
+
+/* Basic Grey */
+.form {
+    margin-right: auto;
+    margin-left: auto;
+    background: #fff;
+    border:1px solid #DADADA;
+    margin-top: 10px;
+    vertical-align: middle;
+}
+.formdiv{
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.form select {
+    background: #FFF url('/image/down-arrow-form.png') no-repeat right;
+    background: #FFF url('/image/down-arrow-form.png') no-repeat right);
+    appearance:none;
+    -webkit-appearance:none; 
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    height: 30px;
+    border-radius: 0px;
+    width: 100%;
+    padding-right: 5px;
+}
+
+.form textarea{
+    height:100px;
+    width:100%;
+}
+
+.form .button {
+    background: #E48F8F;
+    border: none;
+    text-align: center;
+    padding: 10px 25px 10px 25px;
+    color: #FFF;
+    width:100%;
+}
+.form .button:hover {
+    background: #CF7A7A
+}
+
+
+.form p {
+  display: block;
+  margin-bottom: .5em;
+  color: #333;
+  border-bottom: 1px solid #FFDD17;
+  white-space: normal;
+}
+
+.pure-table{
+  width: 33.3333%;
+}
+
+
+.form input[type=text], .form input[type=password], .form input[type=email], .form input[type=url], .form input[type=date], .form input[type=month], .form input[type=time], .form input[type=datetime], .form input[type=datetime-local], .form input[type=week], .form input[type=number], .form input[type=search], .form input[type=tel], .form input[type=color], .form select, .form textarea {
+padding: .5em .6em;
+display: inline-block;
+height: 30px;
+border: 1px solid #FFDD17;
+box-shadow: inset 0 1px 3px #ddd;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+
+input[type=file]{
+border: 1px solid #FFDD17;
+padding-left:5px;
+width: 80%;
+display: inline-block;
 
 }
-*/
 
-.right {
-    background-image: url("/image/right-arrow.png");
-    padding-right: 10px;
-    padding-left: 10px;
+input [type="radio"]{
+  padding-left: 5px;
+  padding-right: 5px;
 }
-.down {
-    background-image: url("/image/down-arrow.png");
-    padding-right: 10px;
-    padding-left: 10px;
+
+.form-1{
+  padding-bottom:10px;
+  padding-top:10px;
+  border-bottom: 1px solid #DADADA;
+  padding-right: 5px;
+  padding-left: 5px;
 }
+
+.form-1:last-child {
+  border-bottom: none;
+}
+
+
+
+
 
 /***********
 * @column_grid2 instagram shit happens here
@@ -467,20 +558,18 @@ button,input,select,textarea {
  */
 button,
 input {
-  line-height: 30px;
+  line-height: 25px;
 }
 
 input[type="checkbox"],
 input[type="radio"] {
   box-sizing: border-box;
+  padding-left: 5px;
   /* 1 */
-
-  padding: 0;
+ 
   /* 2 */
 
 }
-
-
 
 button,
 html input[type="button"],
@@ -502,12 +591,9 @@ background-color: white;
        border-bottom: 1px solid #8F9093; 
        margin-bottom:5px;
        height:44px;
-       
-   
 }
 
 .searchbox {
-
       background-color: #fff;
       border: 1px solid #FFDD17;
       box-sizing: border-box;
@@ -530,13 +616,9 @@ background-color: white;
       vertical-align: middle;
       }
 
- form {
-    display: block;
-    margin-top: 0em;
-    }
 
- .searchboxinput {
-     color: #939597; width: 150px; font-family: inherit; font-weight:300; padding-left: 2px; padding-top: 1px; padding-bottom: 1px;}
+
+ .searchboxinput {color: #939597; width: 150px; font-family: inherit; font-weight:300; padding-left: 2px; padding-top: 1px; padding-bottom: 1px;}
 
 
 
@@ -662,83 +744,3 @@ p{
 
 
 
-/* ==========================================================================
-   Forms
-   ========================================================================== */
-
-/*
- * Define consistent border, margin, and padding.
- */
- /*
- * 1. Addresses `appearance` set to `searchfield` in Safari 5 and Chrome.
- * 2. Addresses `box-sizing` set to `border-box` in Safari 5 and Chrome
- *    (include `-moz` to future-proof).
- */
-input[type="search"] {
-  -webkit-appearance: textfield;
-  /* 1 */
-
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  /* 2 */
-
-  box-sizing: content-box;
-}
-
-/*
- * Removes inner padding and search cancel button in Safari 5 and Chrome
- * on OS X.
- */
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-/*
- * Removes inner padding and border in Firefox 4+.
- */
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-fieldset {
-  border: 1px solid #c0c0c0;
-  margin: 0 2px;
-  padding: 0.35em 0.625em 0.75em;
-}
-
-button,input,select,textarea {
-  font-family: inherit;
-  font-size: 100%;
-  margin: 0;
-}
-/*
- * Addresses Firefox 4+ setting `line-height` on `input` using `!important` 
- */
-button,
-input {
-  line-height: normal;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box;
-  /* 1 */
-
-  padding: 0;
-  /* 2 */
-
-}
-
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-  -webkit-appearance: button;
-  /* 2 */
-
-  cursor: pointer;
-  /* 3 */
-
-}

@@ -10,6 +10,15 @@ var fs = require('fs'); // Using the filesystem module
 var httpServer = http.createServer(requestHandler);
 var path = require('path');
 
+
+//database stuff
+/*var reports = require('./data');
+var db = require('./db');
+var testDB = require('./Test')(reports);*/
+
+
+
+
 var HTTP_OK = 200,
 HTTP_ERR_UNKNOWN = 500,
 HTTP_ERR_NOT_FOUND = 404;
