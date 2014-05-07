@@ -1,418 +1,757 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>DecodeDelhi</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="format-detection" content="telephone=no" />
 
     <meta charset="utf-8">
     <link href="css/main.css" rel="stylesheet" media="screen" type="text/css">
 
+    <!--bootstrap files-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
 
-    <style>
-      html, body, #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-      }
 
-      #map-canvas{
-        z-index: 1;
-        
-      }
-    </style>
+    <script type="application/x-javascript">
+    addEventListener("load", function() {
+        setTimeout(hideURLbar, 0);
+    }, false);
 
-    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    }
+    </script>
     <!--
     Include the maps javascript with sensor=true because this code is using a
     sensor (a GPS locator) to determine the user's location.
     See: https://developers.google.com/maps/documentation/javascript/tutorial#Loading_the_Maps_API
     -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCj64SLgM6xw5SvmXq25OH_-Md-kwyeNeQ&sensor=true"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!--script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script-->
+    <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script-->
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
-
-    <script src="/public/js/handlebars-v1.3.0.js"></script>
+    <!-- socket -->
     <script src="/socket.io/socket.io.js"></script>
-
-    <script>
-
-      var socket  = null;
-      var searchText = null;
-      var instagramData = null;
-        //initializing socket
-          socket = io.connect('/'); // 'http://localhost:8080' //'{{ socketIOHost }}'
-
-        //Accordion Menu 
-        $(document).ready(function(){
-
-          //initializing socket
-         // socket = io.connect('/'); // 'http://localhost:8080' //'{{ socketIOHost }}'
-
-
-          //display the intagram image when received from the server
-           socket.on('searchresult', function (data) {
-                    //console.log("Got image");
-                    instagramData = data;
-                    console.log(data[0]);
-                    var dataAmt;
-                    if (data.length < 20){
-                      dataAmt = data.length;
-                    }
-                    else{
-                      dataAmt = 20;
-                    }
-
-                    for (var i = 0; i < dataAmt; i++){
-                        var imageLink = data[i].images.thumbnail.url;
-                        var imgHTML = "<img src='" + imageLink + "'>";
-                        $("#imgContent").append(imgHTML);
-                    }
-
-              });
-
-
-//ul li table tr td
-//ul li ul li
-      
-        $('#cssmenu ul ul li:odd').addClass('odd');
-        $('#cssmenu ul ul li:even').addClass('even');
-        $('#cssmenu > ul > li > a').click(function() {
-          $('#cssmenu li').removeClass('active');
-          $(this).closest('li').addClass('active'); 
-          var checkElement = $(this).next();
-          if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
-            $(this).closest('li').removeClass('active');
-            checkElement.slideUp('normal');
-          }
-          if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
-            $('#cssmenu ul ul:visible').slideUp('normal');
-            checkElement.slideDown('normal');
-          }
-          if($(this).closest('li').find('ul').children().length == 0) {
-            return true;
-          } else {
-            return false; 
-          }   
-        });
-
-        $("span #mpcClients").click(function() {
-        $("#hidden0").slideToggle(500);
-
-        // This adds a class if the element doesn't already have it
-        // if the element already has the class it will remove it.
-        $("td h3").toggleClass("right down"); 
-       });
-
-  });
+    <!--script src="/jquery-1.10.2.js"></script-->
+    <script src="/jquery-ui-1.10.4.js"></script>
+    <!--script>window.jQuery || document.write('<script src="js/jquery-1.7.2.min.js"><\/script>')</script-->
 
 
 
-
-//ading function triggered by the search box
-//function sendInstagramSearchRequest(searchText){
-function sendInstagramSearchRequest(){  
-      console.log("here");
-      searchText =  document.forms["input"]["place"].value; 
-      socket.emit('clientSearch',searchText);
-}
-
-
-//Accordion Menu finish
-
-// Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see a blank space instead of the map, this
-// is probably because you have denied permission for location sharing.
-
-
-var map;
-
-function initialize() {
-  var mapOptions = {
-    zoom: 14,
-    center: new google.maps.LatLng(28.628052, 77.218454),
-    mapTypeControl: false,
-    panControl: false,
-    scaleControl: true,
-    streetViewControl: false,
-    zoomControl: true,
-    zoomControlOptions: {
-      style: google.maps.ZoomControlStyle.SMALL,
-      position: google.maps.ControlPosition.LEFT_BOTTOM
+    <style>
+    html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
     }
-  }
-  
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-
-  // Try HTML5 geolocation
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
-
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: 'Location found using HTML5.'
-      });
-
-      map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
-}
-
-function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
-
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(28.628052, 77.218454),
-    content: content
-  };
-
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
-  </head>
-  <body>
+    #map-canvas {
+        z-index: 1;
+    }
+    #sectionTitle {
+        width: 195px;
+        margin: 0;
+        text-align: center;
+        font-weight: bold;
+        font-weight: 300;
+        font-size:24px;
+        font-family:  lato, "Helvatica", "Myriad Pro", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    }
+    #sectionTitle.BeSafe span {
+        color: red;
+    }
+    #sectionTitle.BeSmart span {
+        color: blue;
+    }
+    #sectionTitle.KnowMore span {
+        color: green;
+    }
+    .tabButtons {
+        width: 20px;
+    }
     
-    <header id="header">
-                                      <div id="sticky">
-                                          <div id="nav-bar">
-                                            <div id="headerBar"></div>
-                                            <div id="nav-bar1"><a href="homepage"  id="homelink"><img width="200px" src="image/logo.png" alt="logo"/></a></div>
+    ul.nav.nav-tabs {
+        padding-right: 0;
+        position: fixed;
+        height: 44px;
+        background-color: #ffffff;
+        width: 260px;
+        padding-top: 0;
+        margin-top:98px;
+        overflow-y: scroll;
+        padding-bottom:0;
+    }
 
-                                            <div id="nav-bar2"></div>
-                                            <div id="nav-bar3">
-                                                 <div id="internal-links">
-                                                   <!--   <h3 style="position: absolute; left:40%; display:inline;"><snap style="color:#191547;">#</snap>BeSafe <snap style="color:#F68E47;">#</snap>BeSmart  <snap style="color:#E8238E;">#</snap>KnowMore</h3>-->
-                                                    <!-- <ul class="nav">
+    .nav-tabs>li>a{
+        color:black;
+        border: 0;
+        border-radius: 0;
+        background-color: transparent;
+        width:20px;
+}
+  
+      .nav-tabs>li>a:hover{
+        color:black;
+        border: 0;
+        border-radius: 0;
+        background-color: transparent;
+}
+
+.tab-content{
+    padding-top:30px;
+}
+    </style>
+</head>
+
+<body>
+
+    <header id="header">
+        <div id="sticky">
+            <div id="nav-bar">
+                <div id="headerBar"></div>
+                <div id="nav-bar1">
+                    <a href="homepage" id="homelink">
+                        <img width="200px" src="image/logo-main.png" alt="logo" />
+                    </a>
+                </div>
+
+                <div id="nav-bar2"></div>
+                <div id="nav-bar3">
+                    <div id="internal-links">
+                        <h3 style="display:inline; text-align: center; padding-left: 600px">
+                            <snap style="color:#191547;">#</snap>BeSafe
+                            <snap style="color:#F68E47;">#</snap>BeSmart
+                            <snap style="color:#E8238E;">#</snap>KnowMore</h3>
+                        <!-- <ul class="nav">
                                                       <li><a href="#">About</a></li>
                                                       <li><a href="#">How To Participate</a></li>
                                                       <li><a href="#">Privacy Policy</a></li>
                                                   </ul>-->
 
-                                                  <span class="nav"><a href="#">About</a> <strong>.</strong> <a href="#">How To Participate</a> <strong>.</strong> <a href="#">Privacy Policy</a></span>
-                                                 </div>
-                                                 </div>
-                                            </div>
+                         <span class="nav"><a href="#">About</a> 
+                            <strong>.</strong> <a href="#">How To Participate</a> 
+                            <strong>.</strong> <a href="#">Privacy Policy</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-                                            <div id="nav-bar4"></div>
-                                      </div>
-                                    </div>
+            <div id="nav-bar4"></div>
+        </div>
+        </div>
     </header>
 
-    <div id="wrap"  > 
-                    
-                    <div class="column_grid">
-                              <div class="column_grid1 ">
-                                <div id='cssmenu'>
+    <div id="wrap">
 
-                                     <ul>
-                                          <!--*********************Report Harassment***********-->
-                                           <li><a href='#'><img class="a" src="image/besafe30x30.png" alt="symbol"/><span>Report Harassment</span></a>
-                                              <ul>
-                                                <li><table style="width:100%">
-                                                        <tr>
-                                                          <td><img class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
-                                                          <td><span>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></span></td>
-                                                        </tr>
-                                                      </table>
-                                                  </li>
-                                                    <li><table style="width:100%">
-                                                        <tr>
-                                                          <td><img class="iconimg" src="image/besafe30x30.png" alt="symbol"/></td>
-                                                          <td><a href='#'><span>Drop Anonymously</span></a></td>
-                                                          <td><a href='#'><img class="iconimg2" src="image/right-arrow.png" alt="symbol"/></a></td>
-                                                        </tr>
-                                                      </table>
-                                                </li>
-                                                <li><table style="width:100%">
-                                                        <tr>
-                                                          <td><img class="iconimg" src="image/besafe30x30.png" alt="symbol"/></td>
-                                                          <td><a href='#'><span>Drop Anonymously</span></a></td>
-                                                          <td><a href='#'><img class="iconimg2" src="image/right-arrow.png" alt="symbol"/></a></td>
-                                                        </tr>
-                                                      </table>
-                                                </li>
-                                              </ul>
-                                          </li>
+        <div class="column_grid">
+            <div class="column_grid1 ">
+                <div id='cssmenu'>
 
-                                            <!--**********************Drop A Smart Tip***********-->
-                                          <li><a href='#'><img class="a" src="image/besmart30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
-                                            <ul>
-                                              <li><table style="width:100%">
-                                                      <tr>
-                                                        <td><img class="iconimg" class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
-                                                        <td><span>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></span></td>
-                                                      </tr>
-                                                    </table>
-                                                </li>
+                    <ul>
+                        <!--*********************Report Harassment***********-->
+                        <li>
+                            <a href='#'>
+                                <img class="a" src="image/besafe30x30.png" alt="symbol" />
+                                <span>Report Harassment</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style="text-align: center">
+                                                <span>Instagram or Tweet, Your Story With
+                                                    <snap style="color:#51C8EF;">Location Tag</snap>,
+                                                    <snap style="color:#5D2C84;">#area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style=" border-right: 1px solid #939597;">
+                                                <img class="iconimg" src="image/instagram.png" alt="symbol" />Instagram
+                                            </td>
+                                            <td>
+                                                <img class="iconimg" src="image/twitter.png" alt="symbol" />Tweet
+                                            </td>
 
-                                              <li><table style="width:100%">
-                                                      <tr>
-                                                        <td><img class="iconimg" src="image/besmart30x30.png" alt="symbol"/></td>
-                                                        <td><a href='#'><span>Drop Anonymously</span></a></td>
-                                                        <td><a href='#'><img class="iconimg2" src="image/right-arrow.png" alt="symbol"/></a></td>
-                                                      </tr>
-                                                    </table>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td>
+                                                <img class="iconimg" src="image/besafe30x30.png" alt="symbol" />
+                                            </td>
+                                            <td>
+                                                <a href='#'>
+                                                    <span>Drop Anonymously</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href='#'>
+                                                    <img class="iconimg2" src="image/right-arrow.png" alt="symbol" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!--**********************form***********-->
+                                    <form class="form" action="/myaction" autocomplete="on" method="post">
+                                        <div class="formdiv">
+                                            <p class="required_notification">
+                                                <span style="color:red;">*</span>Denotes Required Field</p>
 
-                                                    <!--**********************form***********-->
-                                                     <form class="form" action="/myaction" autocomplete="on" method="post">
-                                                        <div class="formdiv">
-                                                            <p class="required_notification"> <span style="color:red;">* </span> Denotes Required Field </p>
+                                            <div class="form-1">
+                                                <label>Gender:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <input type="radio" name="sex" value="male" checked> Male
+                                                <input type="radio" name="sex" value="female"> Female
+                                                <input type="radio" name="sex" value="others"> Other
 
-                                                            <div class="form-1"><label>Gender: <span style="color:red;">* </span></label>
-                                                                      <input style="padding-left:2px;" type="radio" name="sex" value="male">  Male
-                                                                      <input type="radio" name="sex" value="female" checked>  Female
-                                                                      <input type="radio" name="sex" value="others">  Transgender <br>
-                                                            </div>
+                                            </div>
+                                            <div class="form-1">
+                                                <label for="age">Age:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <input style="width:80%;" type="number" class="form-control" id="age" placeholder="Age" min="1" max="90" required>
+                                                <span class="help-block"></span>
+                                            </div>
 
-                                                            <div class="form-1"><label>Catagory Of Harassment: <span style="color:red;">* </span></label>
-                                                                  <select name="Catagory Of Harassment">
-                                                                      <option value="None selected">Please select below</option>
-                                                                      <option value="Groping">Groping/Unwanted Touching</option>
-                                                                      <option value="Comments/Questions">Taking pictures </option>
-                                                                      <option value="Sexually Offensive Gestures">Sexually Offensive Gestures</option>
-                                                                      <option value="Stalking">Stalking/Blocking Path</option>
-                                                                      <!--<option value="">Comments/Questions on appearance, sexual orientation</option>-->
-                                                                  </select>
-                                                                </div>
-                                                            <div class="form-1"> <label>Location: <span style="color:red;">* </span></label>
-                                                             </div>
-                                                            <div class="form-1"><label>Add Details:<span style="color:red;">* </span> </label>
-                                                              <textarea id="text-box" name="detail" rows="2" maxlength="120" placeholder="Add details to the timeline"></textarea>
-                                                            </div>
+                                            <div id="dropdown1" class="form-1">
+                                                <label>Catagory Of Harassment:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <input style="width:100%;" type="text" list="harassment">
 
-                                                            <div class="form-1">
-                                                              <lable>Upload Picture(optional) </lable>
-                                                              <input type="file" name="file"><img style="padding-left:5px;"src="image/picture.png" alt="symbol"/></div>
-                                                             
-                                                            <div class="form-1">
-                                                               <input class="button" type="submit" name="submit" id="smartTip_submit" value="Submit">
-                                                            </div> 
-                                                        
-                                                           </div>
-                                                         </form> 
-                                                    
-                                                  </li>
-                                            </ul>
-                                           </li>
+                                                <datalist id="harassment">
+                                                    <option value="Groping/Unwanted Touching" />
+                                                    <option value="Taking pictures" />
+                                                    <option value="Sexually Offensive Gestures" />
+                                                    <option value="Stalking/Blocking Path" />
+                                                </datalist>
+                                            </div>
+                                            <div class="form-1">
+                                                <label>Location:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <div>
+                                                    <input style="width:100%; margin-bottom:3px;" type="text" placeholder="Address" name="address">
+                                                </div>
+                                                <div>
+                                                    <input id="location" style="width:100%;" type="text">
+                                                </div>
 
-                                           <!--**********************What’s up Delhi?***********-->
+                                            </div>
+                                            <div class="form-1">
+                                                <label>Add Details:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <textarea id="text-box" name="detail" rows="2" maxlength="120" placeholder="Add details to the timeline"></textarea>
+                                            </div>
 
-                                           <li><a href='#'><img class="a" src="image/knowmore30x30.png" alt="symbol"/><span>What’s up Delhi?</span></a>
-                                            <ul>
-                                              <li><table style="width:100%">
-                                                      <tr>
-                                                        <td><img class="iconimg" class="iconimg" src="image/instagramicon22x22.png" alt="symbol"/></td>
-                                                        <td><span>Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></span></td>
-                                                      </tr>
-                                                    </table>
-                                                </li>
-                                            </ul>
-                                           </li>
+                                            <div class="form-1">
+                                                <label>Upload Picture(optional)</label>
+                                                <input type="file" name="file">
+                                                <img style="padding-left:5px;" src="image/picture.png" alt="symbol" />
+                                            </div>
 
-                                     </ul> <!--**********************all form options***********-->
+                                            <div class="form-1">
+                                                <label style="width:80%">The information provided is true to my knowledge.</label>
+                                                <input style="width:10%;" id="check" class="checkbox" type="checkbox">
+                                            </div>
 
-              
+                                            <div class="form-1">
+                                                <input class="button" type="submit" name="submit" id="smartTip_submit" value="Submit">
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!--**********************Drop A Smart Tip***********-->
+                        <li>
+                            <a href='#'>
+                                <img class="a" src="image/besmart30x30.png" alt="symbol" />
+                                <span>Drop A Smart Tip</span>
+                            </a>
+                            <ul>
+                                  <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style="text-align: center">
+                                                <span>Instagram or Tweet, Your Story With
+                                                    <snap style="color:#51C8EF;">Location Tag</snap>,
+                                                    <snap style="color:#F68D49;">#area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style=" border-right: 1px solid #939597;">
+                                                <img class="iconimg" src="image/instagram.png" alt="symbol" />Instagram
+                                            </td>
+                                            <td>
+                                                <img class="iconimg" src="image/twitter.png" alt="symbol" />Tweet
+                                            </td>
+
+                                        </tr>
+                                    </table>
+                                </li>
+
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td>
+                                                <img class="iconimg" src="image/besmart30x30.png" alt="symbol" />
+                                            </td>
+                                            <td>
+                                                <a href='#'>
+                                                    <span>Drop Anonymously</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href='#'>
+                                                    <img class="iconimg2" src="image/right-arrow.png" alt="symbol" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!--**********************form***********-->
+
+                                    <form class="form" action="/myaction" autocomplete="on" method="post">
+                                        <div class="formdiv">
+                                            <p class="required_notification">
+                                                <span style="color:red;">*</span>Denotes Required Field</p>
+
+                                            <div class="form-1">
+                                                <label>Location:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <select name="location">
+                                                    <option value="None selected">Please select below</option>
+                                                    <option value="">Groping/Unwanted Touching</option>
+                                                    <option value="">Taking pictures</option>
+                                                    <option value="">Sexually Offensive Gestures</option>
+                                                    <option value="">Stalking/Blocking Path</option>
+                                                    <option value="">Comments/Questions on appearance, sexual orientation</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-1">Title Of Your Smart Street Tip:
+                                                <span style="color:red;">*</span>
+                                                <div>
+                                                    <input style="width:100%;" type="text" placeholder="Smart Street Tip e.g; Bargain" name="SafetyTip">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-1">
+                                                <label>Add Details:
+                                                    <span style="color:red;">*</span>
+                                                </label>
+                                                <textarea id="text-box" name="detail" rows="2" maxlength="120" placeholder="Add details of your smart street tip to the time line. e.g; Keep Your Pepper Spray Handy, Bargain in this market etc."></textarea>
+                                            </div>
+
+                                            <div class="form-1">
+                                                <label>Upload Picture(optional)</label>
+                                                <input type="file" name="file">
+                                                <img style="padding-left:5px;" src="image/picture.png" alt="symbol" />
+                                            </div>
+
+                                            <div class="form-1">
+                                                <input class="button" type="submit" name="submit" id="smartTip_submit" value="Submit">
+                                            </div>
+
+                                        </div>
+                                    </form>
+
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!--**********************What’s up Delhi?***********-->
+
+                        <li>
+                            <a href='#'>
+                                <img class="a" src="image/knowmore30x30.png" alt="symbol" />
+                                <span>What’s up Delhi?</span>
+                            </a>
+                            <ul>
+                                 <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style="text-align: center">
+                                                <span>Instagram or Tweet, Your Story With
+                                                    <snap style="color:#51C8EF;">Location Tag</snap>,
+                                                    <snap style="color:#E6278F;">#area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style=" border-right: 1px solid #939597;">
+                                                <img class="iconimg" src="image/instagram.png" alt="symbol" />Instagram
+                                            </td>
+                                            <td>
+                                                <img class="iconimg" src="image/twitter.png" alt="symbol" />Tweet
+                                            </td>
+
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <!--**********************all form options***********-->
 
 
+                </div>
+            </div>
 
 
-         <!--<ul>
-               <li><a href='#'><img width="30px" src="image/besafe30x30.png" alt="symbol"/><span>Report Harassment</span></a>
-                <ul><li style="vertical-align: middle;">
-                        <img style="padding-top: 5px;" width="10%" src="image/instagramicon22x22.png" alt="symbol"/>
-                        <span  style="float:right; width:80%">Instagram or Tweet, Your Story With<snap style="color:#51C8EF;"> Location Tag</snap>,<snap style="color:#5D2C84;"> #area name(eg.#Janpath) #BeSafe #DeCodeDelhi</snap></span>
-                    </li>
-                     <li><a href='#'><img width="20px" src="image/besafe30x30.png" alt="symbol"/><span>Drop Anonymously</span></a></li>
-                </ul>
-               </li>
-
-               <li><a href='#'><img width="30px" src="image/besmart30x30.png" alt="symbol"/><span>Drop A Smart Tip</span></a>
-                  <ul>
-                     <li><a href='#'><span>Widgets</span></a></li>
-                     <li><a href='#'><span>Menus</span></a></li>
-                  </ul>
-               </li>
-               <li><a href='#'><img width="30px" src="image/knowmore30x30.png" alt="symbol"/><span>What’s up Delhi?</span><p class="right"></p></a>
-
-                  <ul>
-                     <li><a href='#'><span>About</span></a></li>
-                  </ul>
-               </li>
-          </ul>-->
-
-
-           </div>
-        </div>
-
-
-                             <!--********************************
+            <!--********************************
                               IMAGE instagram
                               *********************************-->
 
-                              <div class="column_grid2">
-                                                  <div id="searchplaceboxwrapper">
-                              <!--********************************
+            <div class="column_grid2">
+                <div id="searchplaceboxwrapper">
+                    <!--********************************
                               search bar
                               *********************************-->
-                                                       <div id="searchboxwrapper">
-                                                          <div class="searchbox">
-                                                                   <form class="initial-searchbox-wrapper" name="input" role="search" method="get" action="">
-                                                                    <input type="text" name="place" placeholder="search" class="searchboxinput">
-
-                                                                    
-                                                                    <!-- <input type="image" width="20px" src="image/search.png" value="" id="search_button" onClick="sendInstagramSearchRequest()">-->
+                    <div id="searchboxwrapper">
+                        <div class="searchbox">
+                            <form class="initial-searchbox-wrapper" name="input" role="search" method="get" action="">
+                                <input type="text" name="place" placeholder="search" class="searchboxinput">
 
 
-                                                                      <input id="search_button" type="button" name="button" Value="Search" onClick="sendInstagramSearchRequest()">
-                                                                   </form>
-                                                                  <br/>
-                                                          </div>
-                                                        </div>
+                                <!-- <input type="image" width="20px" src="image/search.png" value="" id="search_button" onClick="sendInstagramSearchRequest()">-->
 
-                             <!--********************************
-                              Place will come from JS
-                              *********************************-->
 
-                                                        <div id="placenamewrapper">
-                                                          <div id="placename"></div>
-                                                        </div>
-                                                </div>   <!--searchplaceboxwrapper end-->   
+                                <input id="search_button" type="button" name="button" Value="Search" onClick="sendInstagramSearchRequest()">
+                            </form>
+                            <br/>
+                        </div>
+                    </div>
+                    <!--searchboxwrapper end-->
 
-                              <!--********************************
-                              IMAGE WRAPPER - content
-                              *********************************-->
-                                                       <div id="instaimage">
-                                                        <div id="imgContent"></div>
-                                                       </div>
 
-                           </div><!--column_grid2 end-->
-                  </div> <!--column_grid end-->
+                    <!--********************************
+                                                       Place will come from JS
+                                                         *********************************-->
 
-                 <div id="map-canvas"></div>
-     </div><!--wrap end-->
+                    <div class="placenamewrapper">
+                        <div id="placename">
+                            <h3>#placename</h3>
+                        </div>
+                    </div>
+                </div>
+                <!--searchplaceboxwrapper end-->
 
-     
-              
-  </body>
+
+
+    
+
+
+
+
+                <ul class="nav nav-tabs">
+                    <li class="tabButtons">
+                        <a class="btnPrevious">
+                            <</a>
+                    </li>
+                    <li id="sectionTitle">
+                        <span>#</span>instagram</li>
+
+                    <li class="active tabHeader">
+                        <a href="#tab1" data-toggle="tab" data-name="BeSafe"></a>
+                    </li>
+                    <li class="tabHeader">
+                        <a href="#tab2" data-toggle="tab" data-name="BeSmart"></a>
+                    </li>
+                    <li class="tabHeader">
+                        <a href="#tab3" data-toggle="tab" data-name="KnowMore" data-position="3"></a>
+                    </li>
+
+                    <li class="tabButtons"><a class="btnNext">></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <h1>Instagram</h1>
+
+                        <div id="imgContent"></div>
+                    </div>
+                    <div class="tab-pane" id="tab2">
+                        <h1>Other feed</h1>
+                    </div>
+                    <div class="tab-pane" id="tab3">
+                        <h1>Third Feed</h1>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <!--column_grid2 end-->
+        </div>
+        <!--column_grid end-->
+
+        <div id="map-canvas"></div>
+    </div>
+    <!--wrap end-->
+
+
+    <script type="text/javascript">
+    var socket = null;
+    var searchText = null;
+    var instagramData = null;
+    //initializing socket
+    socket = io.connect('/'); // 'http://localhost:8080' //'{{ socketIOHost }}'
+
+    //Accordion Menu 
+    $(document).ready(function() {
+
+        $('li.tabHeader a').hide();
+        $('.btnNext').click(function() {
+
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            var customtitle = $('.active a').data("name");
+
+            //console.log(customtitle);
+            $('#sectionTitle').html('<span>#</span>' + customtitle);
+            $('#sectionTitle').removeClass();
+            $('#sectionTitle').addClass(customtitle);
+        });
+
+        $('.btnPrevious').click(function() {
+            $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+            var customtitle = $('.active a').data("name");
+            //console.log(customtitle);
+            $('#sectionTitle').html('<span>#</span>' + customtitle);
+            $('#sectionTitle').removeCSS();
+            $('#sectionTitle').addClass(customtitle);
+        });
+
+        //initializing socket
+        // socket = io.connect('/'); // 'http://localhost:8080' //'{{ socketIOHost }}'
+
+
+        //display the intagram image when received from the server
+        socket.on('searchresult', function(data) {
+            //console.log("Got image");
+            instagramData = data;
+            console.log(data[0]);
+            var dataAmt;
+            if (data.length < 20) {
+                dataAmt = data.length;
+            } else {
+                dataAmt = 10;
+            }
+
+            for (var i = 0; i < dataAmt; i++) {
+                var image = data[i].images.low_resolution.url;
+                var instaLink = data[i].link;
+
+                var _userName = data[i].user.full_name;
+                var _userComment = data[i].caption.text;
+                var _fblink = '';
+                var _userThumb = data[i].user.profile_picture;
+
+                var instaHTML = '<div class ="instimg"><a href="' + instaLink + '"target="_blank"><img src="' + image + '"></a><div class="media"><a class="pull-left" href="#"><img class="media-object img-circle" src="' + _userThumb + '" alt="' + _userName + '"></a><div class="media-body"><h4 class="media-heading">' + _userName + '</h4>' + _userComment + '<div>' + _fblink + '</div></div></div></div>';
+
+                //$("#imgContent").append(imgHTML);
+                $("#imgContent").append(instaHTML);
+            }
+
+        });
+
+
+        //ul li table tr td
+        //ul li ul li
+
+        $('#cssmenu ul ul li:odd').addClass('odd');
+        $('#cssmenu ul ul li:even').addClass('even');
+        $('#cssmenu > ul > li > a').click(function() {
+            $('#cssmenu li').removeClass('active');
+            $(this).closest('li').addClass('active');
+            var checkElement = $(this).next();
+            if ((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                $(this).closest('li').removeClass('active');
+                checkElement.slideUp('normal');
+            }
+            if ((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                $('#cssmenu ul ul:visible').slideUp('normal');
+                checkElement.slideDown('normal');
+            }
+            if ($(this).closest('li').find('ul').children().length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        $("span #mpcClients").click(function() {
+            $("#hidden0").slideToggle(500);
+
+            // This adds a class if the element doesn't already have it
+            // if the element already has the class it will remove it.
+            $("td h3").toggleClass("right down");
+        });
+
+
+
+        //auto comple suggestions for locations
+
+
+        var availableTags = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+        ];
+        $("#location").autocomplete({
+            source: availableTags
+        });
+
+
+
+    });
+
+
+
+
+    //ading function triggered by the search box
+    //function sendInstagramSearchRequest(searchText){
+
+    function sendInstagramSearchRequest() {
+        console.log("here");
+        searchText = document.forms["input"]["place"].value;
+        socket.emit('clientSearch', searchText);
+    }
+
+
+    //Accordion Menu finish
+
+    // Note: This example requires that you consent to location sharing when
+    // prompted by your browser. If you see a blank space instead of the map, this
+    // is probably because you have denied permission for location sharing.
+    var newDelhi = new google.maps.LatLng(28.628052, 77.218454);
+
+    var neighborhoods = [
+      new google.maps.LatLng(52.511467, 13.447179),
+      new google.maps.LatLng(52.549061, 13.422975),
+      new google.maps.LatLng(52.497622, 13.396110),
+      new google.maps.LatLng(52.517683, 13.394393)
+    ];
+
+    var markers = [];
+    var iterator = 0;
+
+    var map;
+
+    function initialize() {
+        var mapOptions = {
+            zoom: 14,
+            center: newDelhi,
+            mapTypeControl: false,
+            panControl: false,
+            scaleControl: true,
+            streetViewControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL,
+                position: google.maps.ControlPosition.LEFT_BOTTOM
+            }
+        }
+
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+
+        // Try HTML5 geolocation
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = new google.maps.LatLng(position.coords.latitude,
+                    position.coords.longitude);
+
+                var infowindow = new google.maps.InfoWindow({
+                    map: map,
+                    position: pos,
+                    content: 'your location'
+                });
+
+                map.setCenter(pos);
+            }, function() {
+                handleNoGeolocation(true);
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleNoGeolocation(false);
+        }
+    }
+
+    function handleNoGeolocation(errorFlag) {
+        if (errorFlag) {
+            var content = 'Error: The Geolocation service failed.';
+        } else {
+            var content = 'Error: Your browser doesn\'t support geolocation.';
+        }
+
+        var options = {
+            map: map,
+            position: new google.maps.LatLng(28.628052, 77.218454),
+            content: content
+        };
+
+        var infowindow = new google.maps.InfoWindow(options);
+        map.setCenter(options.position);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</body>
+
 </html>
